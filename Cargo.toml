@@ -39,6 +39,10 @@ lto = true
 codegen-units = 1
 incremental = false
 
+[lib]
+name = "caqe"
+crate-type = ["rlib","cdylib"]
+
 [[bin]]
 name = "caqe"
 path = "src/bin/caqe.rs"

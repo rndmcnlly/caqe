@@ -1,4 +1,4 @@
-#![deny(unsafe_code)]
+//#![deny(unsafe_code)]
 #![deny(unused_must_use)]
 #![warn(clippy::all, clippy::pedantic)]
 //#![warn(clippy::cargo)]
@@ -634,4 +634,20 @@ impl DCaqeConfig {
 
         Ok(result)
     }
+}
+
+use std::ffi::CStr;
+use std::os::raw::c_char;
+
+#[no_mangle]
+pub unsafe extern "C" fn caqe_solve(input_ptr: *const c_char) -> u32 {
+    let input = CStr::from_ptr(input_ptr).to_str().unwrap();
+
+    let mut matrix = parse::qdimacs::parse(input).unwrap();
+    let mut solver = CaqeSolver::new(&mut matrix);
+    let result = solver.solve() as u32;
+    
+    // let output = solver.qdimacs_output().dimacs();
+
+    return result;
 }
